@@ -347,18 +347,23 @@ with st.sidebar:
                 st.error("Invalid image format.")
                 image = None
     else:
-        sample_dir = Path("data/synthetic")
-        sample_files = sorted([f.name for f in sample_dir.iterdir() if f.suffix.lower() in {".png", ".jpg"}]) if sample_dir.exists() else []
+        sample_dir = Path(__file__).resolve().parent / "TEST DATA"
+        sample_files = {
+            "testing_17 — clear five-row field": "testing_17_png.rf.2cbfe9d703e1046a6bd252360814d983.jpg",
+            "testing_28 — dense, regular rows": "testing_28_png.rf.9749fcf39aea7932df9a36f8645b7381.jpg",
+            "testing_33 — distinct row gaps": "testing_33_png.rf.8206f2b80887a56d425abdfcaf22ab49.jpg",
+            "testing_35 — clear five-row field": "testing_35_png.rf.d5391a0424a348be3bef0010be20801f.jpg",
+        }
         if sample_files:
-            selected_sample = st.selectbox("Select Sample", sample_files)
+            selected_sample = st.selectbox("Select Sample", list(sample_files))
             try:
-                image = Image.open(sample_dir / selected_sample).convert("RGB")
+                image = Image.open(sample_dir / sample_files[selected_sample]).convert("RGB")
                 st.markdown(f"<span class='kg-meta'>Detected Dimensions: {image.width}x{image.height} px</span>", unsafe_allow_html=True)
             except Exception:
                 st.error("Error loading sample.")
                 image = None
         else:
-            st.warning("No sample files found in data/synthetic/")
+            st.warning("No sample files found in TEST DATA/")
 
     st.markdown("<hr style='border: none; border-top: 1px solid #A1A1AA; margin: 2rem 0;'>", unsafe_allow_html=True)
     
